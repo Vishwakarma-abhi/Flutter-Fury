@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -5,9 +6,24 @@ import 'package:get/get.dart';
 
 import 'package:dtexto/CustomWidget/customAppbar.dart';
 
-class ViewText extends StatelessWidget {
-  final String text;
-  const ViewText({super.key, required this.text});
+class ViewText extends StatefulWidget {
+  String text;
+  ViewText({super.key, required this.text});
+
+  @override
+  State<ViewText> createState() => _ViewTextState();
+}
+
+class _ViewTextState extends State<ViewText> {
+  late DatabaseReference dbRef;
+  bool isSaved = false;
+  @override
+  void initState() {
+    super.initState();
+    //Here we are creating a table of name Students
+    //with a reference of the database dbRef act as object for accessing database
+    dbRef = FirebaseDatabase.instance.ref().child('Notes');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +45,64 @@ class ViewText extends StatelessWidget {
             height: 50,
           ),
           // displaying the Scanned Text
-          Center(
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          Container(
+            child: Center(
+              child: Text(
+                widget.text,
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
+
+          SizedBox(
+            height: 50,
+          ),
+          GestureDetector(
+            onTap: (() {
+              Map<String, String> notes = {"notes": widget.text};
+              setState(() {
+                isSaved = !isSaved;
+              });
+              dbRef.push().set(notes);
+            }),
+            child: Container(
+              width: 150,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: isSaved ? Colors.green : Colors.red,
+                  borderRadius: BorderRadius.circular(25)),
+              child: Center(
+                  child: Text(
+                isSaved ? 'SAVED' : 'SAVE',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              )),
+            ),
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          GestureDetector(
+            onTap: (() {
+              setState(() {});
+            }),
+            child: Container(
+              width: 150,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Colors.red, borderRadius: BorderRadius.circular(25)),
+              child: Center(
+                  child: Text(
+                'VIEW NOTES',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              )),
+            ),
+          )
         ],
       ),
     );

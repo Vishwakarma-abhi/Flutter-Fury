@@ -5,7 +5,9 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 
 import 'Screens/HomePage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(const MyApp());
 }
 

@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(ViewText(text:scannedText));
+                    Get.to(ViewText(text: scannedText));
                   },
                   child: Container(
                     height: 50,
