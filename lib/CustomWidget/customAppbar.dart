@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final customappbar = AppBar(
-  backgroundColor: Colors.red,
+  backgroundColor: Colors.blue,
   //leading
   leading: Icon(
     Icons.account_circle,

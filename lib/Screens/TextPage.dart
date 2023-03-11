@@ -1,3 +1,4 @@
+import 'package:dtexto/Screens/notes.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -28,7 +29,16 @@ class _ViewTextState extends State<ViewText> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customappbar,
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        //leading
+        leading: Icon(
+          Icons.account_circle,
+          size: 45,
+        ),
+        //title
+        title: Text('DTEXTO'),
+      ),
       body: Column(
         children: [
           SizedBox(
@@ -57,19 +67,22 @@ class _ViewTextState extends State<ViewText> {
           SizedBox(
             height: 50,
           ),
+
           GestureDetector(
             onTap: (() {
-              Map<String, String> notes = {"notes": widget.text};
+              var str = widget.text;
+              Map<String, String> notes = {"notes": str};
               setState(() {
                 isSaved = !isSaved;
               });
+
               dbRef.push().set(notes);
             }),
             child: Container(
               width: 150,
               height: 50,
               decoration: BoxDecoration(
-                  color: isSaved ? Colors.green : Colors.red,
+                  color: isSaved ? Colors.green : Colors.blue,
                   borderRadius: BorderRadius.circular(25)),
               child: Center(
                   child: Text(
@@ -86,6 +99,7 @@ class _ViewTextState extends State<ViewText> {
           ),
           GestureDetector(
             onTap: (() {
+              Get.to(ScannedNotes());
               setState(() {});
             }),
             child: Container(

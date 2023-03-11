@@ -20,64 +20,85 @@ class _ScannedNotesState extends State<ScannedNotes> {
   DatabaseReference reference = FirebaseDatabase.instance.ref().child('Notes');
   bool isDone = false;
 
-  Widget listItem({required Map student}) {
+  Widget listItem({required Map note}) {
     return Container(
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(10),
-      height: 150,
-      decoration: BoxDecoration(
-          color: Color.fromARGB(255, 250, 194, 42),
-          borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        children: [
-          CheckboxListTile(
-              controlAffinity: ListTileControlAffinity.leading,
-              value: isDone,
-              onChanged: (value) {
-                setState(() {
-                  isDone = value!;
-                });
-              }),
-           Center(
-            child: Text(
-              'YOUR SCANNED TEXT',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
+        height: 200,
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(15)),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Center(
+              //   child: Text(
+              //     'YOUR SCANNED TEXT',
+              //     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              //   ),
+              // ),
 
-          SizedBox(
-            height: 50,
-          ),
-          // displaying the Scanned Text
-          Container(
-            child: Center(
-              child: Text(
-                notes['name'],
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-              GestureDetector(
-                onTap: () {
-                  //Delete Operation
-                  reference.child(student['key']).remove();
-                },
-                child: Icon(
-                  Icons.delete,
-                  color: Theme.of(context).primaryColor,
+              // SizedBox(
+              //   height: 50,
+              // ),
+              // displaying the Scanned Text
+              Container(
+                child: Center(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Note',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              //Delete Operation
+                              reference.child(note['key']).remove();
+                            },
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        note['notes'],
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
-              )
+              ),
             ],
-          )
-        ],
-      ),
-    );
+          ),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customappbar,
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        //leading
+        leading: Icon(
+          Icons.notes,
+          size: 45,
+        ),
+        //title
+        title: Text('Notes'),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -87,9 +108,9 @@ class _ScannedNotesState extends State<ScannedNotes> {
                   query: dbRef,
                   itemBuilder: (BuildContext context, DataSnapshot snapshot,
                       Animation<double> animation, int index) {
-                    Map student = snapshot.value as Map;
-                    student['key'] = snapshot.key;
-                    return listItem(student: student);
+                    Map note = snapshot.value as Map;
+                    note['key'] = snapshot.key;
+                    return listItem(note: note);
                   }),
             ),
           ),
